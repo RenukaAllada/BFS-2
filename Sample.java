@@ -193,5 +193,91 @@ class Solution {
         dfs(root.left,root,level+1,x,y);
         dfs(root.right,root,level+1,x,y);
     }
+
+    /***********************PROBLEM-3*****************/
+    //tc:0(V+E)
+        //sc:0(v)
+    class Solution {
+        Boolean bipartite;
+        int[] colors;
+        int n;
+        public boolean isBipartite(int[][] graph) {
+            if(graph==null || graph.length==0){
+                return true;
+            }
+            n=graph.length;
+            colors=new int[n];
+            bipartite=true;
+            Arrays.fill(colors,-1);
+
+            for(int i=0;i<n;i++){
+                if(colors[i]==-1){
+                    colors[i]=0;
+                    dfs(graph,i);
+                }
+                if(!bipartite){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void dfs(int[][] graph,int u){
+            if(bipartite==false){
+                return;
+            }
+            //logic
+
+            for(int i=0;i<graph[u].length;i++){
+                int v=graph[u][i];
+                if(colors[v]== -1){
+                    colors[v]=(colors[u]==0?1:0);
+                    dfs(graph,v);
+                }else{
+                    if(colors[u]==colors[v]){
+                        bipartite=false;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
+    //TC:0(V+E)
+//SC:0(V)
+    class Solution {
+        public boolean isBipartite(int[][] graph) {
+            if(graph==null || graph.length==0){
+                return true;
+            }
+            Queue<Integer> q=new LinkedList<>();
+            int n=graph.length;
+            int[] colors=new int[n];
+            Arrays.fill(colors,-1);
+            for(int i=0;i<n;i++){
+                if(colors[i]==-1){
+                    colors[i]=0;
+                    q.add(i);
+                    while(!q.isEmpty()){
+                        int curr=q.poll();
+                        for(int j=0;j<graph[curr].length;j++){
+                            int v=graph[curr][j];
+                            if(colors[v]==-1){
+                                colors[v]=(colors[curr]==1)?0:1;
+                                q.add(v);
+                            }else{
+                                if(colors[v]==colors[curr]){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
 }
 
